@@ -17,7 +17,7 @@ namespace KeybindChaos
         private List<PlayerAction> _storedBindings;
 
         private LayoutRoot layout;
-        private TextObject displayTimer;
+        private TextFormatter<float> displayTimer;
         private float time;
 
         void Start()
@@ -28,13 +28,15 @@ namespace KeybindChaos
             {
                 layout = new(true, "KC Timer");
 
-                displayTimer = new(layout)
+                displayTimer = new(layout, 0, t => string.Format("{0:0}s", time), "KC Time Formatter")
                 {
                     HorizontalAlignment = HorizontalAlignment.Right,
                     VerticalAlignment = VerticalAlignment.Top,
-                    FontSize = 40,
-                    Font = UI.TrajanBold,
-                    Text = ""
+                    Text = new(layout)
+                    {
+                        FontSize = 40,
+                        Font = UI.TrajanBold,
+                    }
                 };
             }
 
@@ -57,7 +59,7 @@ namespace KeybindChaos
             }
 #endif
             time -= Time.deltaTime;
-            displayTimer.Text = string.Format("{0:0}s", time);
+            displayTimer.Data = time;
             if (time < 0)
             {
                 RandomizeBinds();
