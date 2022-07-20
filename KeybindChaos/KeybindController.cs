@@ -43,6 +43,7 @@ namespace KeybindChaos
 
         void Update()
         {
+#if DEBUG
             if (Input.GetKeyDown(KeyCode.G))
             {
                 time = 1000f;
@@ -54,7 +55,7 @@ namespace KeybindChaos
                 Assign(_storedBindings);
                 time = 1000f;
             }
-
+#endif
             time -= Time.deltaTime;
             displayTimer.Text = string.Format("{0:0}s", time);
             if (time < 0)
@@ -98,11 +99,11 @@ namespace KeybindChaos
         }
         private void PreventSavingButtonBinds(On.InputHandler.orig_SendButtonBindingsToGameSettings orig, InputHandler self)
         {
-            _logger.Log("Not sending button binds to game settings");
+            _logger.LogDebug("Not sending button binds to game settings");
         }
         private void PreventSavingKeyBinds(On.InputHandler.orig_SendKeyBindingsToGameSettings orig, InputHandler self)
         {
-            _logger.Log("Not sending keybinds to game settings");
+            _logger.LogDebug("Not sending keybinds to game settings");
         }
 
 
