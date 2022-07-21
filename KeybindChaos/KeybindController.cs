@@ -1,24 +1,29 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using InControl;
 using MagicUI.Core;
 using MagicUI.Elements;
 using Modding;
 using RandomizerCore.Extensions;
 using UnityEngine;
+using Random = System.Random;
 
 namespace KeybindChaos
 {
     public class KeybindController : MonoBehaviour
     {
+        internal static KeybindController Instance;
+
         private readonly Modding.ILogger _logger = new SimpleLogger($"{nameof(KeybindChaos)}:{nameof(KeybindController)}");
 
         private List<PlayerAction> _storedBindings;
 
+        private readonly Random rng = new();
+
         private LayoutRoot layout;
         private TextFormatter<float> displayTimer;
         private float time;
+
+        void Awake() => Instance = this;
 
         void Start()
         {
@@ -26,9 +31,12 @@ namespace KeybindChaos
 
             if (layout == null)
             {
-                layout = new(true, "KC Timer");
+                layout = new(true, "KC Timer")
+                {
+                    VisibilityCondition = () => KeybindChaos.GS.Enabled
+                };
 
-                displayTimer = new(layout, 0, t => string.Format("{0:0}s", time), "KC Time Formatter")
+                displayTimer = new(layout, 0, FormatTimeDisplay, "KC Time Formatter")
                 {
                     HorizontalAlignment = HorizontalAlignment.Right,
                     VerticalAlignment = VerticalAlignment.Top,
@@ -40,31 +48,40 @@ namespace KeybindChaos
                 };
             }
 
-            time = 60f;
+            time = KeybindChaos.GS.ResetTime ?? -1f;
+        }
+
+        private static string FormatTimeDisplay(float t)
+        {
+            if (KeybindChaos.GS.ResetTime is null) return string.Empty;
+
+            return string.Format("Keybind Reset: {0:0}s", t);
         }
 
         void Update()
         {
-#if DEBUG
-            if (Input.GetKeyDown(KeyCode.G))
+            if (!KeybindChaos.GS.Enabled) return;
+
+            if (KeybindChaos.GS.Binds.ManualTrigger.WasPressed)
             {
-                time = 1000f;
                 RandomizeBinds();
+            }
+            else if (KeybindChaos.GS.ResetTime is not null)
+            {
+                if (time == -1)
+                {
+                    time = KeybindChaos.GS.ResetTime.Value;
+                }
+
+                time -= Time.deltaTime;
+
+                if (time < 0)
+                {
+                    RandomizeBinds();
+                }
             }
 
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                Assign(_storedBindings);
-                time = 1000f;
-            }
-#endif
-            time -= Time.deltaTime;
             displayTimer.Data = time;
-            if (time < 0)
-            {
-                RandomizeBinds();
-                time = 60f;
-            }
         }
 
         void OnDestroy()
@@ -74,14 +91,18 @@ namespace KeybindChaos
 
             Assign(_storedBindings);
             AllowSavingBinds();
+
+            Instance = null;
         }
 
         public void RandomizeBinds()
         {
+            time = KeybindChaos.GS.ResetTime ?? -1f;
+
             PreventSavingBinds();
 
             List<PlayerAction> actions = Retrieve();
-            KeybindChaos.rng.PermuteInPlace(actions);
+            rng.PermuteInPlace(actions);
             Assign(actions);
         }
 
@@ -108,6 +129,14 @@ namespace KeybindChaos
             _logger.LogDebug("Not sending keybinds to game settings");
         }
 
+        public void Reset()
+        {
+            time = KeybindChaos.GS.ResetTime ?? -1f;
+
+            Assign(_storedBindings);
+            AllowSavingBinds();
+        }
+
 
         public List<PlayerAction> Retrieve()
         {
@@ -125,8 +154,6 @@ namespace KeybindChaos
         }
         public void Assign(List<PlayerAction> actions)
         {
-            KeybindChaos.instance.Log(InputHandler.Instance.inputActions.attack.Name);
-
             InputHandler.Instance.inputActions.attack = actions[0];
             InputHandler.Instance.inputActions.superDash = actions[1];
             InputHandler.Instance.inputActions.dreamNail = actions[2];

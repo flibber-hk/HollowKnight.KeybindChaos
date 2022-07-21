@@ -1,39 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using InControl;
-using MagicUI.Core;
-using MagicUI.Elements;
 using Modding;
-using RandomizerCore.Extensions;
-using UnityEngine;
-using Random = System.Random;
 
 namespace KeybindChaos
 {
-    public class KeybindChaos : Mod
+    public class KeybindChaos : Mod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         internal static KeybindChaos instance;
 
-        internal static Random rng = new();
+        public static GlobalSettings GS = new();
+
+        public void OnLoadGlobal(GlobalSettings gs) => GS = gs;
+        public GlobalSettings OnSaveGlobal() => GS;
+
         
         public KeybindChaos() : base(null)
         {
             instance = this;
-
-            On.InputHandler.SendKeyBindingsToGameSettings += InputHandler_SendKeyBindingsToGameSettings;
-            On.InputHandler.SendButtonBindingsToGameSettings += InputHandler_SendButtonBindingsToGameSettings;
-        }
-
-        private void InputHandler_SendButtonBindingsToGameSettings(On.InputHandler.orig_SendButtonBindingsToGameSettings orig, InputHandler self)
-        {
-            Log("Not sending button binds to game settings");
-        }
-
-        private void InputHandler_SendKeyBindingsToGameSettings(On.InputHandler.orig_SendKeyBindingsToGameSettings orig, InputHandler self)
-        {
-            Log("Not sending keybinds to game settings");
         }
 
         public override string GetVersion()
@@ -53,6 +34,13 @@ namespace KeybindChaos
             orig(self);
 
             self.gameObject.AddComponent<KeybindController>();
+        }
+
+        public bool ToggleButtonInsideMenu => false;
+
+        public MenuScreen GetMenuScreen(MenuScreen modListMenu, ModToggleDelegates? toggleDelegates)
+        {
+            return ModMenu.GetMenuScreen(modListMenu);
         }
     }
 }
