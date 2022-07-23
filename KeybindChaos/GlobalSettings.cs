@@ -16,6 +16,8 @@ namespace KeybindChaos
         /// </summary>
         public float? ResetTime = 60f;
 
+        public bool KeybindDisplay = true;
+
         [JsonConverter(typeof(PlayerActionSetConverter))]
         public KCBinds Binds = new();
     }

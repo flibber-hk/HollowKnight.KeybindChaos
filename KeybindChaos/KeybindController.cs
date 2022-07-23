@@ -23,17 +23,21 @@ namespace KeybindChaos
         private TextFormatter<float> displayTimer;
         private float time;
 
+        private LayoutRoot bindLayout;
+
         void Awake() => Instance = this;
 
         void Start()
         {
+            bindLayout = KeybindDisplay.Setup();
+
             _storedBindings = Retrieve();
 
             if (layout == null)
             {
                 layout = new(true, "KC Timer")
                 {
-                    VisibilityCondition = () => { _logger.Log(KeybindChaos.GS.Enabled); return KeybindChaos.GS.Enabled; }
+                    VisibilityCondition = () => KeybindChaos.GS.Enabled
                 };
 
                 displayTimer = new(layout, 0, FormatTimeDisplay, "KC Time Formatter")
@@ -89,6 +93,9 @@ namespace KeybindChaos
             layout?.Destroy();
             layout = null;
 
+            bindLayout?.Destroy();
+            bindLayout = null;
+
             Assign(_storedBindings);
             AllowSavingBinds();
 
@@ -104,6 +111,9 @@ namespace KeybindChaos
             List<PlayerAction> actions = Retrieve();
             rng.PermuteInPlace(actions);
             Assign(actions);
+
+            bindLayout?.Destroy();
+            bindLayout = KeybindDisplay.Setup();
         }
 
         private bool _preventSavingBinds = false;
@@ -145,28 +155,28 @@ namespace KeybindChaos
         }
 
 
-        public List<PlayerAction> Retrieve()
+        public static List<PlayerAction> Retrieve()
         {
             return new()
             {
-                InputHandler.Instance.inputActions.attack,
-                InputHandler.Instance.inputActions.superDash,
-                InputHandler.Instance.inputActions.dreamNail,
                 InputHandler.Instance.inputActions.jump,
+                InputHandler.Instance.inputActions.attack,
                 InputHandler.Instance.inputActions.dash,
                 InputHandler.Instance.inputActions.cast,
+                InputHandler.Instance.inputActions.superDash,
+                InputHandler.Instance.inputActions.dreamNail,
                 InputHandler.Instance.inputActions.quickCast,
                 InputHandler.Instance.inputActions.quickMap
             };
         }
-        public void Assign(List<PlayerAction> actions)
+        public static void Assign(List<PlayerAction> actions)
         {
-            InputHandler.Instance.inputActions.attack = actions[0];
-            InputHandler.Instance.inputActions.superDash = actions[1];
-            InputHandler.Instance.inputActions.dreamNail = actions[2];
-            InputHandler.Instance.inputActions.jump = actions[3];
-            InputHandler.Instance.inputActions.dash = actions[4];
-            InputHandler.Instance.inputActions.cast = actions[5];
+            InputHandler.Instance.inputActions.jump = actions[0];
+            InputHandler.Instance.inputActions.attack = actions[1];
+            InputHandler.Instance.inputActions.dash = actions[2];
+            InputHandler.Instance.inputActions.cast = actions[3];
+            InputHandler.Instance.inputActions.superDash = actions[4];
+            InputHandler.Instance.inputActions.dreamNail = actions[5];
             InputHandler.Instance.inputActions.quickCast = actions[6];
             InputHandler.Instance.inputActions.quickMap = actions[7];
         }
