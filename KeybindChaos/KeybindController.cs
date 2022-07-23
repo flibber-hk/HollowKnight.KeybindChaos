@@ -33,7 +33,7 @@ namespace KeybindChaos
             {
                 layout = new(true, "KC Timer")
                 {
-                    VisibilityCondition = () => KeybindChaos.GS.Enabled
+                    VisibilityCondition = () => { _logger.Log(KeybindChaos.GS.Enabled); return KeybindChaos.GS.Enabled; }
                 };
 
                 displayTimer = new(layout, 0, FormatTimeDisplay, "KC Time Formatter")
@@ -131,8 +131,15 @@ namespace KeybindChaos
 
         public void Reset()
         {
+            ResetTimer();
+            ResetBinds();
+        }
+        public void ResetTimer()
+        {
             time = KeybindChaos.GS.ResetTime ?? -1f;
-
+        }
+        public void ResetBinds()
+        {
             Assign(_storedBindings);
             AllowSavingBinds();
         }

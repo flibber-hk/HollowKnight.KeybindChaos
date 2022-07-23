@@ -1,5 +1,4 @@
-﻿using Modding;
-using Satchel.BetterMenus;
+﻿using Satchel.BetterMenus;
 
 namespace KeybindChaos
 {
@@ -15,10 +14,10 @@ namespace KeybindChaos
                 (
                     name: "Mod active",
                     description: string.Empty,
-                    values: new[]{ "Off", "On" },
+                    values: new[]{ "False", "True" },
                     applySetting: val =>
                     {
-                        KeybindChaos.GS.Enabled = val != 1;
+                        KeybindChaos.GS.Enabled = val == 1;
                         if (!KeybindChaos.GS.Enabled)
                         {
                             KeybindController.Instance?.Reset();
@@ -31,15 +30,19 @@ namespace KeybindChaos
                     name: "Timer duration",
                     description: string.Empty,
                     values: new[]{ "Disabled", "30s", "1min", "2min", "5min", "10min" },
-                    applySetting: val => KeybindChaos.GS.ResetTime = val switch
+                    applySetting: val =>
                     {
-                        0 => null,
-                        1 => 30,
-                        2 => 60,
-                        3 => 120,
-                        4 => 300,
-                        5 => 600,
-                        _ => null
+                        KeybindChaos.GS.ResetTime = val switch
+                        {
+                            0 => null,
+                            1 => 30,
+                            2 => 60,
+                            3 => 120,
+                            4 => 300,
+                            5 => 600,
+                            _ => null
+                        };
+                        KeybindController.Instance?.ResetTimer();
                     },
                     loadSetting: () => KeybindChaos.GS.ResetTime switch
                     {
@@ -53,7 +56,7 @@ namespace KeybindChaos
                     }
                 ),
                 new KeyBind("Manual Trigger", KeybindChaos.GS.Binds.ManualTrigger),
-                new MenuButton("Reset", "Recover the default binds", _ => KeybindController.Instance?.Reset())
+                new MenuButton("Reset", "Recover the saved binds", _ => KeybindController.Instance?.Reset())
             });
 
             return MenuRef.GetMenuScreen(modListMenu);
