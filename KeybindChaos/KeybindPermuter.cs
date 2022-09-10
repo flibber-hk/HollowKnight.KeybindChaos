@@ -69,6 +69,8 @@ namespace KeybindChaos
         [PublicAPI]
         public static void RestoreBinds()
         {
+            if (!_isRandomized) return;
+
             AssignBinds(_storedBindings);
             _storedBindings = null;
             _isRandomized = false;

@@ -23,7 +23,7 @@ namespace KeybindChaos.Components
 
         public void OnDestroy()
         {
-            _layout.Destroy();
+            _layout?.Destroy();
             _layout = null;
             KeybindPermuter.OnRandomize -= Reset;
             KeybindPermuter.OnRestore -= Reset;
@@ -31,7 +31,7 @@ namespace KeybindChaos.Components
 
         public void Reset()
         {
-            _layout.Destroy();
+            _layout?.Destroy();
             _layout = null;
             _layout = CreateLayout();
         }
