@@ -1,4 +1,9 @@
+using KeybindChaos.Components;
 using Modding;
+using Modding.Utils;
+using Satchel;
+using System.Reflection;
+using UnityEngine.SceneManagement;
 
 namespace KeybindChaos
 {
@@ -19,21 +24,34 @@ namespace KeybindChaos
 
         public override string GetVersion()
         {
-            return GetType().Assembly.GetName().Version.ToString();
+            Assembly asm = GetType().Assembly;
+            string version = asm.GetName().Version.ToString();
+            string hash = asm.GetAssemblyHash();
+            return $"{version}-{hash}";
         }
         
         public override void Initialize()
         {
             Log("Initializing Mod...");
 
-            On.HeroController.Start += OnHeroControllerStart;
+            On.HeroController.Start += EnterFileSetup;
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ResetOnReturnToMenu;
         }
 
-        private void OnHeroControllerStart(On.HeroController.orig_Start orig, HeroController self)
+        private void ResetOnReturnToMenu(Scene _, Scene scene)
+        {
+            if (scene.name != Constants.MENU_SCENE) return;
+
+            KeybindPermuter.RestoreBinds();
+        }
+
+        private void EnterFileSetup(On.HeroController.orig_Start orig, HeroController self)
         {
             orig(self);
 
-            self.gameObject.AddComponent<KeybindController>();
+            self.gameObject.GetOrAddComponent<TimeTrigger>();
+            self.gameObject.GetOrAddComponent<TextDisplay>();
+            self.gameObject.GetOrAddComponent<KeybindDisplay>();
         }
 
         public bool ToggleButtonInsideMenu => false;

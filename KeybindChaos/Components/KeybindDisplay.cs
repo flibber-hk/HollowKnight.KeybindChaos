@@ -1,18 +1,42 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GlobalEnums;
 using MagicUI.Core;
 using MagicUI.Elements;
 using MagicUI.Graphics;
 using UnityEngine;
 
-namespace KeybindChaos
+namespace KeybindChaos.Components
 {
-    public static class KeybindDisplay
+    public class KeybindDisplay : MonoBehaviour
     {
         private static readonly TextureLoader _textureLoader = new(typeof(KeybindDisplay).Assembly, "KeybindChaos.Resources");
 
-        public static LayoutRoot Setup()
+
+        private LayoutRoot _layout;
+
+        public void Start()
+        {
+            _layout = CreateLayout();
+            KeybindPermuter.OnRandomize += Reset;
+            KeybindPermuter.OnRestore += Reset;
+        }
+
+        public void OnDestroy()
+        {
+            _layout.Destroy();
+            _layout = null;
+            KeybindPermuter.OnRandomize -= Reset;
+            KeybindPermuter.OnRestore -= Reset;
+        }
+
+        public void Reset()
+        {
+            _layout.Destroy();
+            _layout = null;
+            _layout = CreateLayout();
+        }
+
+        private static LayoutRoot CreateLayout()
         {
             LayoutRoot layout = new(persist: true, name: "KC bind display")
             {
@@ -21,7 +45,6 @@ namespace KeybindChaos
 
             GridLayout grid = new(layout, name: "KC bind grid")
             {
-                MinWidth = 1920, // divide the entire screen's width
                 RowDefinitions =
                 {
                     new GridDimension(1, GridUnit.AbsoluteMin),
@@ -83,7 +106,7 @@ namespace KeybindChaos
         {
             int count = 0;
 
-            foreach (InControl.PlayerAction action in KeybindController.Retrieve())
+            foreach (InControl.PlayerAction action in KeybindPermuter.RetrieveBinds())
             {
                 ButtonSkin skin = UIManager.instance.uiButtonSkins.GetButtonSkinFor(action);
 

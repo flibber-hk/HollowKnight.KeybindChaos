@@ -7,14 +7,15 @@ namespace KeybindChaos
     public class GlobalSettings
     {
         /// <summary>
-        /// Whether the mod is enabled.
+        /// Whether keybinds should change after enough time has elapsed.
         /// </summary>
-        public bool Enabled = true;
-
+        public bool TimerEnabled = true;
         /// <summary>
-        /// Time before keybinds reset - null for no timer.
+        /// Time before keybinds reset.
         /// </summary>
-        public float? ResetTime = 60f;
+        public float ResetTime = 60f;
+
+        // TODO - other triggers?
 
         public bool KeybindDisplay = true;
 
