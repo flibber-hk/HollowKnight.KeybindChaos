@@ -1,3 +1,4 @@
 RandomizerCore
 Satchel
 MagicUI
+FStats

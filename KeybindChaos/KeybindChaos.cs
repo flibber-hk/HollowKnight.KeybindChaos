@@ -36,6 +36,16 @@ namespace KeybindChaos
 
             On.HeroController.Start += EnterFileSetup;
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ResetOnReturnToMenu;
+
+            if (ModHooks.GetMod("FStatsMod") is not null)
+            {
+                Log("NOTNULL");
+                Interop.FStatsInterop.HookFStats();
+            }
+            else
+            {
+                Log("NULL");
+            }
         }
 
         private void ResetOnReturnToMenu(Scene _, Scene scene)
