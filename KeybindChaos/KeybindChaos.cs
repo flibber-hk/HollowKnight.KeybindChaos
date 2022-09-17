@@ -13,7 +13,11 @@ namespace KeybindChaos
 
         public static GlobalSettings GS = new();
 
-        public void OnLoadGlobal(GlobalSettings gs) => GS = gs;
+        public void OnLoadGlobal(GlobalSettings gs)
+        {
+            GS = gs;
+            GS.Verify();
+        }
         public GlobalSettings OnSaveGlobal() => GS;
 
         

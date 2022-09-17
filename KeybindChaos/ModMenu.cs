@@ -23,10 +23,10 @@ namespace KeybindChaos
                     values: new[]{ "False", "True" },
                     applySetting: val =>
                     {
-                        KeybindChaos.GS.TimerEnabled = val == 1;
+                        KeybindChaos.GS.TS.Enabled = val == 1;
                         MenuSettingsChanged?.Invoke();
                     },
-                    loadSetting: () => KeybindChaos.GS.TimerEnabled ? 1 : 0
+                    loadSetting: () => KeybindChaos.GS.TS.Enabled ? 1 : 0
                 ),
                 new HorizontalOption
                 (
@@ -37,7 +37,7 @@ namespace KeybindChaos
                     values: new[]{ "15s", "30s", "1min", "2min", "5min", "10min" },
                     applySetting: val =>
                     {
-                        KeybindChaos.GS.ResetTime = val switch
+                        KeybindChaos.GS.TS.ResetTime = val switch
                         {
                             0 => 15,
                             1 => 30,
@@ -49,7 +49,7 @@ namespace KeybindChaos
                         };
                         MenuSettingsChanged?.Invoke();
                     },
-                    loadSetting: () => KeybindChaos.GS.ResetTime switch
+                    loadSetting: () => KeybindChaos.GS.TS.ResetTime switch
                     {
                         10 => 0,
                         30 => 1,
@@ -67,10 +67,10 @@ namespace KeybindChaos
                     values: new[]{ "False", "True" },
                     applySetting: val => 
                     {
-                        KeybindChaos.GS.TimerAudio = val == 1;
+                        KeybindChaos.GS.TS.Audio = val == 1;
                         MenuSettingsChanged?.Invoke();
                     },
-                    loadSetting: () => KeybindChaos.GS.TimerAudio ? 1 : 0
+                    loadSetting: () => KeybindChaos.GS.TS.Audio ? 1 : 0
                 ),
                 new HorizontalOption
                 (

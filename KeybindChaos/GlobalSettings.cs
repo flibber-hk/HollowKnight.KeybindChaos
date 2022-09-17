@@ -4,12 +4,12 @@ using Newtonsoft.Json;
 
 namespace KeybindChaos
 {
-    public class GlobalSettings
+    public class TimerSettings
     {
         /// <summary>
         /// Whether keybinds should change after enough time has elapsed.
         /// </summary>
-        public bool TimerEnabled = true;
+        public bool Enabled = true;
         /// <summary>
         /// Time before keybinds reset.
         /// </summary>
@@ -17,7 +17,12 @@ namespace KeybindChaos
         /// <summary>
         /// Whether to play the audio when near the end of the countdown.
         /// </summary>
-        public bool TimerAudio = false;
+        public bool Audio = false;
+    }
+
+    public class GlobalSettings
+    {
+        public TimerSettings TS = new();
 
         // TODO - other triggers?
 
@@ -25,6 +30,15 @@ namespace KeybindChaos
 
         [JsonConverter(typeof(PlayerActionSetConverter))]
         public KCBinds Binds = new();
+
+        /// <summary>
+        /// Make sure nullable fields are not null.
+        /// </summary>
+        public void Verify()
+        {
+            TS ??= new();
+            Binds ??= new();
+        }
     }
 
     public class KCBinds : PlayerActionSet
