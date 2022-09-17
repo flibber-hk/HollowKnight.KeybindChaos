@@ -18,19 +18,24 @@ namespace KeybindChaos
             {
                 new HorizontalOption
                 (
-                    name: "Timer active",
+                    name: "Timer Active",
                     description: string.Empty,
                     values: new[]{ "False", "True" },
                     applySetting: val =>
                     {
                         KeybindChaos.GS.TimerSettings.Enabled = val == 1;
+
+                        MenuRef.Find("Timer Duration").isVisible = KeybindChaos.GS.TimerSettings.Enabled;
+                        MenuRef.Find("Timer Audio").isVisible = KeybindChaos.GS.TimerSettings.Enabled;
+                        MenuRef.Update();
+
                         MenuSettingsChanged?.Invoke();
                     },
                     loadSetting: () => KeybindChaos.GS.TimerSettings.Enabled ? 1 : 0
                 ),
                 new HorizontalOption
                 (
-                    name: "Timer duration",
+                    name: "Timer Duration",
                     description: string.Empty,
 
                     // TODO - if they change this in the GS file manually, add the new number as an option
@@ -59,7 +64,7 @@ namespace KeybindChaos
                         600 => 5,
                         _ => 2
                     }
-                ),
+                ) { isVisible = KeybindChaos.GS.TimerSettings.Enabled },
                 new HorizontalOption
                 (
                     name: "Timer Audio",
@@ -71,7 +76,7 @@ namespace KeybindChaos
                         MenuSettingsChanged?.Invoke();
                     },
                     loadSetting: () => KeybindChaos.GS.TimerSettings.Audio ? 1 : 0
-                ),
+                ) { isVisible = KeybindChaos.GS.TimerSettings.Enabled },
                 new HorizontalOption
                 (
                     name: "Display binds",

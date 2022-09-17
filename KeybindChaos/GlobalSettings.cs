@@ -17,7 +17,7 @@ namespace KeybindChaos
         /// <summary>
         /// Whether to play the audio when near the end of the countdown.
         /// </summary>
-        public bool Audio = false;
+        public bool Audio = true;
     }
 
     public class RandomizableBinds
