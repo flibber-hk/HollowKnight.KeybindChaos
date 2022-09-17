@@ -20,9 +20,21 @@ namespace KeybindChaos
         public bool Audio = false;
     }
 
+    public class RandomizableBinds
+    {
+        public bool Jump { get; set; } = true;
+        public bool Attack { get; set; } = true;
+        public bool Dash { get; set; } = true;
+        public bool Focus { get; set; } = true;
+        public bool Superdash { get; set; } = true;
+        public bool DreamNail { get; set; } = true;
+        public bool QuickCast { get; set; } = true;
+        public bool QuickMap { get; set; } = true;
+    }
+
     public class GlobalSettings
     {
-        public TimerSettings TS = new();
+        public TimerSettings TimerSettings = new();
 
         // TODO - other triggers?
 
@@ -31,15 +43,20 @@ namespace KeybindChaos
         [JsonConverter(typeof(PlayerActionSetConverter))]
         public KCBinds Binds = new();
 
+        public RandomizableBinds RandomizableBinds = new();
+
         /// <summary>
-        /// Make sure nullable fields are not null.
+        /// Make sure nullable members are not null.
         /// </summary>
         public void Verify()
         {
-            TS ??= new();
+            TimerSettings ??= new();
             Binds ??= new();
+            RandomizableBinds ??= new();
         }
     }
+
+
 
     public class KCBinds : PlayerActionSet
     {

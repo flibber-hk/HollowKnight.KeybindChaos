@@ -81,17 +81,18 @@ namespace KeybindChaos.Components
         private static IEnumerable<ArrangableElement> MakeImageSprites(LayoutRoot layout)
         {
             int count = 0;
-            foreach (string image in new[]
-            {
-                "Jump",
-                "Slash",
-                "Dash",
-                "Focus",
-                "Superdash",
-                "Dreamnail",
-                "Fireball",
-                "Map"
-            })
+
+            List<string> images = new();
+            if (KeybindChaos.GS.RandomizableBinds.Jump) images.Add("Jump");
+            if (KeybindChaos.GS.RandomizableBinds.Attack) images.Add("Slash");
+            if (KeybindChaos.GS.RandomizableBinds.Dash) images.Add("Dash");
+            if (KeybindChaos.GS.RandomizableBinds.Focus) images.Add("Focus");
+            if (KeybindChaos.GS.RandomizableBinds.Superdash) images.Add("Superdash");
+            if (KeybindChaos.GS.RandomizableBinds.DreamNail) images.Add("Dreamnail");
+            if (KeybindChaos.GS.RandomizableBinds.QuickCast) images.Add("Fireball");
+            if (KeybindChaos.GS.RandomizableBinds.QuickMap) images.Add("Map");
+
+            foreach (string image in images)
             {
                 yield return new Image(layout, _textureLoader.GetTexture(image + ".png").ToSprite())
                 {

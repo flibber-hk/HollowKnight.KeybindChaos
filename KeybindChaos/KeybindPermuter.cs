@@ -84,17 +84,18 @@ namespace KeybindChaos
         /// </summary>
         public static List<PlayerAction> RetrieveBinds()
         {
-            return new()
-            {
-                InputHandler.Instance.inputActions.jump,
-                InputHandler.Instance.inputActions.attack,
-                InputHandler.Instance.inputActions.dash,
-                InputHandler.Instance.inputActions.cast,
-                InputHandler.Instance.inputActions.superDash,
-                InputHandler.Instance.inputActions.dreamNail,
-                InputHandler.Instance.inputActions.quickCast,
-                InputHandler.Instance.inputActions.quickMap
-            };
+            List<PlayerAction> actions = new();
+
+            if (KeybindChaos.GS.RandomizableBinds.Jump) actions.Add(InputHandler.Instance.inputActions.jump);
+            if (KeybindChaos.GS.RandomizableBinds.Attack) actions.Add(InputHandler.Instance.inputActions.attack);
+            if (KeybindChaos.GS.RandomizableBinds.Dash) actions.Add(InputHandler.Instance.inputActions.dash);
+            if (KeybindChaos.GS.RandomizableBinds.Focus) actions.Add(InputHandler.Instance.inputActions.cast);
+            if (KeybindChaos.GS.RandomizableBinds.Superdash) actions.Add(InputHandler.Instance.inputActions.superDash);
+            if (KeybindChaos.GS.RandomizableBinds.DreamNail) actions.Add(InputHandler.Instance.inputActions.dreamNail);
+            if (KeybindChaos.GS.RandomizableBinds.QuickCast) actions.Add(InputHandler.Instance.inputActions.quickCast);
+            if (KeybindChaos.GS.RandomizableBinds.QuickMap) actions.Add(InputHandler.Instance.inputActions.quickMap);
+
+            return actions;
         }
 
         /// <summary>
@@ -102,14 +103,48 @@ namespace KeybindChaos
         /// </summary>
         private static void AssignBinds(List<PlayerAction> actions)
         {
-            InputHandler.Instance.inputActions.jump = actions[0];
-            InputHandler.Instance.inputActions.attack = actions[1];
-            InputHandler.Instance.inputActions.dash = actions[2];
-            InputHandler.Instance.inputActions.cast = actions[3];
-            InputHandler.Instance.inputActions.superDash = actions[4];
-            InputHandler.Instance.inputActions.dreamNail = actions[5];
-            InputHandler.Instance.inputActions.quickCast = actions[6];
-            InputHandler.Instance.inputActions.quickMap = actions[7];
+            int index = 0;
+
+            if (KeybindChaos.GS.RandomizableBinds.Jump)
+            {
+                InputHandler.Instance.inputActions.jump = actions[index];
+                index++;
+            }
+            if (KeybindChaos.GS.RandomizableBinds.Attack)
+            {
+                InputHandler.Instance.inputActions.attack = actions[index];
+                index++;
+            }
+            if (KeybindChaos.GS.RandomizableBinds.Dash)
+            {
+                InputHandler.Instance.inputActions.dash = actions[index];
+                index++;
+            }
+            if (KeybindChaos.GS.RandomizableBinds.Focus)
+            {
+                InputHandler.Instance.inputActions.cast = actions[index];
+                index++;
+            }
+            if (KeybindChaos.GS.RandomizableBinds.Superdash)
+            {
+                InputHandler.Instance.inputActions.superDash = actions[index];
+                index++;
+            }
+            if (KeybindChaos.GS.RandomizableBinds.DreamNail)
+            {
+                InputHandler.Instance.inputActions.dreamNail = actions[index];
+                index++;
+            }
+            if (KeybindChaos.GS.RandomizableBinds.QuickCast)
+            {
+                InputHandler.Instance.inputActions.quickCast = actions[index];
+                index++;
+            }
+            if (KeybindChaos.GS.RandomizableBinds.QuickMap)
+            {
+                InputHandler.Instance.inputActions.quickMap = actions[index];
+                index++;
+            }
         }
     }
 }

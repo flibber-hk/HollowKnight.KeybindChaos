@@ -18,7 +18,7 @@ namespace KeybindChaos.Components
 
         private void GetDisplayText(StringBuilder sb)
         {
-            if (!KeybindChaos.GS.TS.Enabled) return;
+            if (!KeybindChaos.GS.TimerSettings.Enabled) return;
 
             if (_time < 10f)
             {
@@ -51,31 +51,31 @@ namespace KeybindChaos.Components
 
         void Start()
         {
-            _time = KeybindChaos.GS.TS.ResetTime;
+            _time = KeybindChaos.GS.TimerSettings.ResetTime;
             TextDisplay.OnBuildDisplayText += GetDisplayText;
             ModMenu.MenuSettingsChanged += OnSettingsChanged;
         }
 
         private void OnSettingsChanged()
         {
-            _time = KeybindChaos.GS.TS.ResetTime;
+            _time = KeybindChaos.GS.TimerSettings.ResetTime;
         }
 
         void Update()
         {
-            if (!KeybindChaos.GS.TS.Enabled) return;
+            if (!KeybindChaos.GS.TimerSettings.Enabled) return;
 
             _time -= Time.deltaTime;
             if (_time < 0f)
             {
-                _time += KeybindChaos.GS.TS.ResetTime;
+                _time += KeybindChaos.GS.TimerSettings.ResetTime;
                 _startedAudio = false;
                 KeybindPermuter.RandomizeBinds();
             }
             if (_time < audioStartTime && !_startedAudio)
             {
                 _startedAudio = true;
-                if (KeybindChaos.GS.TS.Audio)
+                if (KeybindChaos.GS.TimerSettings.Audio)
                 {
                     _as.PlayOneShot(_clip);
                 }
