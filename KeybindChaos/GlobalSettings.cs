@@ -14,6 +14,10 @@ namespace KeybindChaos
         /// Time before keybinds reset.
         /// </summary>
         public float ResetTime = 60f;
+        /// <summary>
+        /// Whether to play the audio when near the end of the countdown.
+        /// </summary>
+        public bool TimerAudio = false;
 
         // TODO - other triggers?
 

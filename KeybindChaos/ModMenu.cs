@@ -8,7 +8,7 @@ namespace KeybindChaos
         private static Menu MenuRef;
 
         /// <summary>
-        /// Event raised when any setting that could affect 
+        /// Event raised when any setting that could affect the keybind randomization triggers is changed
         /// </summary>
         public static event Action MenuSettingsChanged;
 
@@ -34,12 +34,12 @@ namespace KeybindChaos
                     description: string.Empty,
 
                     // TODO - if they change this in the GS file manually, add the new number as an option
-                    values: new[]{ "10s", "30s", "1min", "2min", "5min", "10min" },
+                    values: new[]{ "15s", "30s", "1min", "2min", "5min", "10min" },
                     applySetting: val =>
                     {
                         KeybindChaos.GS.ResetTime = val switch
                         {
-                            0 => 10,
+                            0 => 15,
                             1 => 30,
                             2 => 60,
                             3 => 120,
@@ -59,6 +59,18 @@ namespace KeybindChaos
                         600 => 5,
                         _ => 2
                     }
+                ),
+                new HorizontalOption
+                (
+                    name: "Timer Audio",
+                    description: "Whether to play sound near the end of the timer",
+                    values: new[]{ "False", "True" },
+                    applySetting: val => 
+                    {
+                        KeybindChaos.GS.TimerAudio = val == 1;
+                        MenuSettingsChanged?.Invoke();
+                    },
+                    loadSetting: () => KeybindChaos.GS.TimerAudio ? 1 : 0
                 ),
                 new HorizontalOption
                 (

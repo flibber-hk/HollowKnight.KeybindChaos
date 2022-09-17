@@ -21,11 +21,13 @@
     <None Remove="Resources\**\*.png" />
     <None Remove="Resources\**\*.json" />
     <None Remove="Resources\**\*.xml" />
+    <None Remove="Resources\**\*.wav" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\**\*.png" />
     <EmbeddedResource Include="Resources\**\*.json" />
     <EmbeddedResource Include="Resources\**\*.xml" />
+    <EmbeddedResource Include="Resources\**\*.wav" />
   </ItemGroup>
   
   <ItemGroup>

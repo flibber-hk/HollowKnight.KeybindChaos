@@ -39,12 +39,7 @@ namespace KeybindChaos
 
             if (ModHooks.GetMod("FStatsMod") is not null)
             {
-                Log("NOTNULL");
                 Interop.FStatsInterop.HookFStats();
-            }
-            else
-            {
-                Log("NULL");
             }
         }
 
